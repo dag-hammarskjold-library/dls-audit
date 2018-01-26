@@ -136,7 +136,7 @@ sub options {
 		say join ' - ', @$_ for @opts;
 		exit; 
 	}
-	$opts{$_} || die "required opt $_ missing\n" for qw|i o s|;
+	$opts{$_} || die "required opt $_ missing\n" for qw|i o s 3|;
 	-e $opts{$_} || die qq|"$opts{$_}" is an invalid path\n| for qw|i|;
 	return \%opts;
 }

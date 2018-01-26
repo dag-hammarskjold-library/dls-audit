@@ -45,8 +45,13 @@ sub options {
 sub MAIN {
 	my $opts = shift;
 	
+	open my $in,'<',$opts->{i};
+	
 	# write a list of bib#s for records that need to be added/replaced in DLS
 	
+	my $subdir = 'for_action';
+	-e $subdir or mkdir $subdir;
+	chdir $subdir;
 	open my $update,'>','to_update.tsv';
 	open my $files,'>','add_files.tsv';
 	open my $missing,'>','missing.tsv';
@@ -54,7 +59,6 @@ sub MAIN {
 	
 	#goto HZN;
 	
-	open my $in,'<',$opts->{i};
 	my @not_in_dls;
 	while (my $line = <$in>) {
 		chomp $line;
@@ -69,7 +73,7 @@ sub MAIN {
 		
 		my $comp = sub {
 			my $str = shift; 
-			return grep {/^[A-Z]+$/} split ';', $str;
+			return scalar grep {/^[A-Z]+$/} split ';', $str;
 		};
 		say {$files} $line if $comp->($hzn_langs) > $comp->($dls_langs);
 	}
